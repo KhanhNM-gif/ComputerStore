@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Account;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
 
 
 
@@ -14,15 +13,15 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $fields= $request->validate([
-            'phone'=>'required|string',
-            'email'=>'required|string|unique:users,email',
-            'password'=> 'required|string'
+            'email'=>'required|string|unique:accounts,email|email|max:255',
+            'name'=> 'required|string|max:255',
+            'password'=> 'required|string|confirmed|min:6|max:255'
         ]);
 
-        $user=User::create([
-            'phone'=>$fields['email'],
+        $user=Account::create([
+            'email'=>$fields['email'],
             'name'=>$fields['name'],
-            'password'=>bcrypt($fields['password'])
+            'password'=>password_hash($fields['password'],PASSWORD_DEFAULT)
         ]);
 
         $token=$user->createToken('myapptoken')->plainTextToken;
@@ -32,34 +31,39 @@ class AuthController extends Controller
             'token'=>$token
         ];
 
-        return Response($response,201);
+        return Response($response,200);
     }
-    
+
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'phone' => ['required', 'email'],
-            'password' => ['required'],
+            'email'=>'required|string|email|max:255',
+            'password'=> 'required|string|min:6|max:255'
         ]);
 
         $request = request();
         $token = $request->bearerToken();
 
-        if (User::attempt($credentials)) {
-            $user=User::where('phone',$credentials['phone']) -> first();
+        
+        $user=Account::where('email',$credentials['email']) -> first();
 
+        if($user==null){
+            return response()->json([
+                'message' => 'Email chưa được đăng kí trên hệ thống',
+                "errors"=>[]], 201);
+        }
+
+        if(password_verify($credentials['password'],$user['password'])){
             $token=$user->createToken('myapptoken')->plainTextToken;
-
             $response=[
                 'user'=>$user,
                 'token'=>$token
             ];
-
-            return Response($response,201);
+    
+            return Response($response,200);
         }
-
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        return response()->json([
+            'message' => 'Mật khẩu đăng nhập sai',
+            "errors"=>[]], 201);
     }
 }
