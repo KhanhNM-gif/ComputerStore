@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 
-class Account extends Authenticatable
+class Account extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -32,6 +32,8 @@ class Account extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'OTP',
+        'OTP_verified_at'
     ];
 
     /**

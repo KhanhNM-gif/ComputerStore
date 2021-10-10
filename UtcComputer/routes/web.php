@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/fibo', function () {
+    return view('fibo');
+});
+Route::get('/array', function () {
+    return view('array');
+});
+Route::get('/string', function () {
+    return view('string');
+});
