@@ -24,7 +24,7 @@ class AuthController extends Controller
             'password'=>password_hash($fields['password'],PASSWORD_DEFAULT)
         ]);
 
-        SendEmail::dispatch($user)->delay(now()->addMinute(1));
+        dispatch(new SendEmail($user))->onQueue('queue_name');
 
         $response=[
             'user'=>$user,
