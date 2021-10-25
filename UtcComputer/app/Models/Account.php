@@ -22,6 +22,12 @@ class Account extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'fullname',
+        'phone_number',
+        'address',
+        'province_id',
+        'district_id',
+        'ward_id'
     ];
 
     /**
@@ -33,7 +39,7 @@ class Account extends Authenticatable implements MustVerifyEmail
         'password',
         'remember_token',
         'OTP',
-        'OTP_verified_at'
+        'OTP_verified_at',
     ];
 
     /**
