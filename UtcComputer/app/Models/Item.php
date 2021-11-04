@@ -34,12 +34,12 @@ class Item extends Model
             $item->where('status_id', $search['textSearch']);
         }
 
-        if (array_key_exists('max_price', $search)) {
-            $item->where('promotional_price', '<=', $search['max_price']);
+        if (array_key_exists('maxPrice', $search)) {
+            $item->where('promotional_price', '<=', $search['maxPrice']);
         }
 
-        if (array_key_exists('min_price', $search)) {
-            $item->where('promotional_price', '>=', $search['min_price']);
+        if (array_key_exists('minPrice', $search)) {
+            $item->where('promotional_price', '>=', $search['minPrice']);
         }
 
         if ($search['assetID'] != 0) {
@@ -73,9 +73,10 @@ class Item extends Model
 
     public static function GetOneView($itemID)
     {
-        return Item::selectRaw('item.*,item_status.status_name')
+        return Item::selectRaw('item.*,item_status.status_name,manufacturer.name')
             ->where('item.id', $itemID)
             ->join('item_status', 'item_status.id', '=', 'item.status_id')
+            ->join('manufacturer', 'manufacturer.id', '=', 'item.manufacturer_id')
             ->first();
     }
 

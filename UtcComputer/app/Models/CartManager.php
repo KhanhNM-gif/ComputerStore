@@ -16,7 +16,7 @@ class CartManager
 
     public function getCart()
     {
-        return $this->cart->items()->get();
+        return $this->cart->items()->withPivot('quantity')->get();
     }
 
     public function addToCart($id, $quantity)

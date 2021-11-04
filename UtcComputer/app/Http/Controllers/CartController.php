@@ -22,7 +22,7 @@ class CartController extends Controller
             ], 400);
         }
 
-        $item = Item::GetOne($dataRequest['IdItem']);
+        $item = Item::GetOne($dataRequest['itemId']);
         if (!$item) {
             return response()->json([
                 'message' => 'Sản phẩm không tồn tại',
