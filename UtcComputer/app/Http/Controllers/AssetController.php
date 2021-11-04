@@ -17,7 +17,11 @@ class AssetController extends Controller
             ], 400);
         }
 
-        $ltAsset = Asset::GetListByParentID($output['id']);
+        if ($output) {
+            $ltAsset = Asset::GetListByParentID($output['id']);
+        } else {
+            $ltAsset = Asset::GetListByParentID(0);
+        }
 
         return Response(['ltAsset' => $ltAsset], 200);
     }

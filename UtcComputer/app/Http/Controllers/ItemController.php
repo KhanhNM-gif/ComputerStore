@@ -22,8 +22,7 @@ class ItemController extends Controller
         }
         $dt = $output['dt'];
 
-        $textSearch = "";
-        if (isset($dt->textSearch)) $textSearch = $this->RemoveMarkVietNamese($dt['textSearch']);
+        if (isset($dt->textSearch)) $dt['textSearch'] = $this->RemoveMarkVietNamese($dt['textSearch']);
 
         $ltItem = Item::GetListSearch($dt, $output['ltChildAsset']);
 
@@ -33,10 +32,10 @@ class ItemController extends Controller
     {
         $dataRequest = $request->validate([
             'textSearch' => 'string|max:255|nullable',
-            'statusId' => 'numeric|max:255|nullable',
+            'statusId' => 'numeric|integer|nullable',
             'minPrice' => 'regex:/^\d*$/|nullable',
-            'maxPrice' => 'regex:/^\d*$/|max:255|nullable',
-            'orderBy' => 'string|max:255|nullable',
+            'maxPrice' => 'regex:/^\d*$/|nullable',
+            'orderBy' => 'numeric|integer|nullable',
             'assetID' => 'numeric|integer|required',
             'pageSize' => 'numeric|integer|required',
             'page' => 'numeric|integer|required',
