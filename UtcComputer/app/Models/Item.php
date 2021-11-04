@@ -22,8 +22,65 @@ class Item extends Model
         'updated_at'
     ];
 
-    public static function GetListSearch($textSearch, $pageSize, $ltAssetID)
+    public static function GetListSearch($search, $ltAssetID)
     {
-        return Item::whereIn('asset_ID', array_column($ltAssetID, 'asset_id'))->paginate($pageSize);
+        $item = Item::query();
+
+        if (array_key_exists('textSearch', $search)) {
+            $item->where('item_name', 'LIKE', '%' . $search['textSearch'] . '%');
+        }
+
+        if (array_key_exists('statusId', $search)) {
+            $item->where('status_id', $search['textSearch']);
+        }
+
+        if (array_key_exists('max_price', $search)) {
+            $item->where('promotional_price', '<=', $search['max_price']);
+        }
+
+        if (array_key_exists('min_price', $search)) {
+            $item->where('promotional_price', '>=', $search['min_price']);
+        }
+
+        if ($search['assetID'] != 0) {
+            $item->whereIn('asset_ID', array_column($ltAssetID, 'id'));
+        }
+
+        if (array_key_exists('OrderBy', $search)) {
+            switch ($search['OrderBy']) {
+                case 1:
+                    $item->orderBy('created_at', 'DESC');
+                    break;
+                case 2:
+                    $item->orderBy('num_review', 'DESC');
+                    break;
+                case 3:
+                    $item->orderBy('price - promotional_price', 'DESC');
+                    break;
+                case 4:
+                    $item->orderBy('promotional_price', 'ASC');
+                    break;
+                case 5:
+                    $item->orderBy('promotional_price', 'DESC');
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return $item->paginate($search['pageSize']);
+    }
+
+    public static function GetOneView($itemID)
+    {
+        return Item::selectRaw('item.*,item_status.status_name')
+            ->where('item.id', $itemID)
+            ->join('item_status', 'item_status.id', '=', 'item.status_id')
+            ->first();
+    }
+
+    public static function GetOne($itemID)
+    {
+        return Item::where('id', $itemID)->first();
     }
 }

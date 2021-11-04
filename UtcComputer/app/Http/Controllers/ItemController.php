@@ -11,7 +11,7 @@ class ItemController extends Controller
 {
     use RemoveMark;
 
-    public function GetListPaging(Request $request)
+    public function GetListSearch(Request $request)
     {
         $msgError = $this->GetListValidate($request, $output);
         if ($msgError) {
@@ -20,25 +20,29 @@ class ItemController extends Controller
                 "errors" => []
             ], 400);
         }
-
         $dt = $output['dt'];
 
         $textSearch = "";
         if (isset($dt->textSearch)) $textSearch = $this->RemoveMarkVietNamese($dt['textSearch']);
 
-        $ltItem = Item::GetListSearch($textSearch, $dt['pageSize'], $output['ltChildAsset']);
+        $ltItem = Item::GetListSearch($dt, $output['ltChildAsset']);
 
         return Response(['ltItem' => $ltItem], 200);
     }
-
     private function GetListValidate($request, &$output)
     {
         $dataRequest = $request->validate([
             'textSearch' => 'string|max:255|nullable',
-            'assetID' => 'numeric|integer',
-            'pageSize' => 'numeric|integer',
+            'statusId' => 'numeric|max:255|nullable',
+            'minPrice' => 'regex:/^\d*$/|nullable',
+            'maxPrice' => 'regex:/^\d*$/|max:255|nullable',
+            'orderBy' => 'string|max:255|nullable',
+            'assetID' => 'numeric|integer|required',
+            'pageSize' => 'numeric|integer|required',
+            'page' => 'numeric|integer|required',
         ]);
 
+        $ltChildAsset = null;
         if ($dataRequest['assetID'] != 0) {
             $msgError = Asset::GetOneByID($dataRequest['assetID'], $outAsset);
             if ($msgError) return $msgError;
@@ -52,5 +56,16 @@ class ItemController extends Controller
         ];
 
         return null;
+    }
+
+    public function GetOne(Request $request)
+    {
+        $dataRequest = $request->validate([
+            'itemID' => 'numeric|integer|required'
+        ]);
+
+        $item = Item::GetOneView($dataRequest['itemID']);
+
+        return Response(['item' => $item], 200);
     }
 }

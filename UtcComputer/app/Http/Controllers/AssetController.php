@@ -24,7 +24,7 @@ class AssetController extends Controller
     private function GetListValidate($request, &$output)
     {
         $data = $request->validate([
-            'parentID' => 'numeric|integer',
+            'parentID' => 'numeric|integer|required',
         ]);
 
         if ($data['parentID'] != 0) {
