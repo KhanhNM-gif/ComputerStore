@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Manufacturer extends Model
+class ItemProperty extends Model
 {
-    use HasFactory;
-    protected $table = 'manufacturer';
+    protected $table = 'item_property';
 
     protected $hidden = [
-        'created_at',
         'updated_at',
+        'created_at',
     ];
 
-    public static function GetList()
+    public function AssetProperty()
     {
-        return Manufacturer::all();
+        return $this->belongsTo(AssetProperty::class);
     }
 }

@@ -4,10 +4,14 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ManufacturerController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegionController;
+use App\Http\Controllers\SlideController;
 use App\Http\Controllers\TabController;
 use App\Models\CartManager;
 use App\Models\Item;
+use App\Models\Manufacturer;
 use App\Models\Region;
 use Illuminate\Support\Facades\Route;
 /*
@@ -35,8 +39,17 @@ Route::get('/asset/get_list', [AssetController::class, 'GetList']);
 Route::get('/item/get_list_search', [ItemController::class, 'GetListSearch']);
 Route::get('/item/get_one', [ItemController::class, 'GetOne']);
 
+Route::get('/manufacturer/get_list', [ManufacturerController::class, 'GetList']);
+
+Route::get('/slide/get_list', [SlideController::class, 'GetList']);
+
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::post('/auth/update', [AuthController::class, 'UpdateAccount']);
+
     Route::get('/cart/get_cart', [CartController::class, 'GetCart']);
     Route::post('/cart/add_to_cart', [CartController::class, 'AddToCart']);
     Route::post('/cart/delete_item_cart', [CartController::class, 'DeleteItemCart']);
+
+    Route::post('/order/create_order', [OrderController::class, 'CreateOrder']);
 });

@@ -14,9 +14,14 @@ class CartManager
         $this->cart = $this->findOrCreate($this->findCache());
     }
 
-    public function getCart()
+    public function getListItemInCart()
     {
         return $this->cart->items()->withPivot('quantity')->get();
+    }
+
+    public function getCart()
+    {
+        return $this->cart->get();
     }
 
     public function addToCart($id, $quantity)

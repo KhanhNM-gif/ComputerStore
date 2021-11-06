@@ -38,7 +38,7 @@ class CartController extends Controller
     public function GetCart()
     {
         $cart = new CartManager();
-        return Response(['ltItem' => $cart->GetCart()], 200);
+        return Response(['ltItem' => $cart->getListItemInCart()], 200);
     }
 
     public function DeleteItemCart(Request $request)

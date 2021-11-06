@@ -217,4 +217,8 @@ class AuthController extends Controller
             "errors" => []
         ], 201);
     }
+
+    public function UpdateAccount(Request $request)
+    {
+    }
 }
