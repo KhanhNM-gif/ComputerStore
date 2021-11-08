@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Item extends Model
 {
     use HasFactory;
@@ -55,6 +56,10 @@ class Item extends Model
             $query_item->whereIn('asset_ID', array_column($ltAssetID, 'id'));
         }
 
+        if (array_key_exists('manufacturerIds', $search)) {
+            $query_item->whereIn('manufacturer_id', array_map('intval', explode(',', $search['manufacturerIds'])));
+        }
+
         if (array_key_exists('OrderBy', $search)) {
             switch ($search['OrderBy']) {
                 case 1:
@@ -64,7 +69,7 @@ class Item extends Model
                     $query_item->orderBy('num_review', 'DESC');
                     break;
                 case 3:
-                    $query_item->orderBy('price - promotional_price', 'DESC');
+                    $query_item->orderByRaw('price - promotional_price DESC');
                     break;
                 case 4:
                     $query_item->orderBy('promotional_price', 'ASC');
@@ -108,5 +113,21 @@ class Item extends Model
     public function itemProperties()
     {
         return $this->hasMany(ItemProperty::class);
+    }
+
+    public static function GetListDiscount()
+    {
+        return Item::select('id', 'item_name', 'price', 'image', 'promotional_price')
+            ->orderByRaw('price - promotional_price DESC')
+            ->take(10)
+            ->get();
+    }
+
+    public static function GetListNew()
+    {
+        return Item::select('id', 'item_name', 'price', 'image', 'promotional_price')
+            ->orderBy('created_at', 'DESC')
+            ->take(10)
+            ->get();
     }
 }

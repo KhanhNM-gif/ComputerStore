@@ -6,6 +6,8 @@ use App\Models\Asset;
 use App\Models\Item;
 use App\Traits\RemoveMark;
 use Illuminate\Http\Request;
+use App\Rules\ListId;
+use PhpParser\Node\Expr\List_;
 
 class ItemController extends Controller
 {
@@ -33,6 +35,7 @@ class ItemController extends Controller
         $dataRequest = $request->validate([
             'textSearch' => 'string|max:255|nullable',
             'statusId' => 'numeric|integer|nullable',
+            'manufacturerIds' => ['string', 'max:255', new ListId(), 'nullable'],
             'minPrice' => 'regex:/^\d*$/|nullable',
             'maxPrice' => 'regex:/^\d*$/|nullable',
             'orderBy' => 'numeric|integer|nullable',
@@ -66,5 +69,19 @@ class ItemController extends Controller
         $item = Item::GetOneView($dataRequest['itemID']);
 
         return Response(['item' => $item], 200);
+    }
+
+    public function GetListDiscount()
+    {
+        $ltItem = Item::GetListDiscount();
+
+        return Response(['ltItem' => $ltItem], 200);
+    }
+
+    public function GetListNew()
+    {
+        $ltItem = Item::GetListNew();
+
+        return Response(['ltItem' => $ltItem], 200);
     }
 }

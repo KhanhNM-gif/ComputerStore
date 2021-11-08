@@ -10,7 +10,11 @@ class ManufacturerController extends Controller
 {
     public function GetList(Request $request)
     {
-        $ltManufacturer = Manufacturer::GetList();
+        $dataRequest = $request->validate([
+            'assetID' => 'numeric|integer|required'
+        ]);
+
+        $ltManufacturer = Manufacturer::GetList($dataRequest['assetID']);
 
         return Response(['ltManufacturer' => $ltManufacturer], 200);
     }

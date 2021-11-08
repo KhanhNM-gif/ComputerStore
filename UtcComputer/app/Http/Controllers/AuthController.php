@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Jobs\SendEmail;
 use App\Models\Region;
 use App\Rules\PhoneNumber;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
 
 class AuthController extends Controller
@@ -218,7 +219,44 @@ class AuthController extends Controller
         ], 201);
     }
 
-    public function UpdateAccount(Request $request)
+    public function UpdateInfomation(Request $request)
     {
+        $fields = $request->validate([
+            'name' => 'required|string|max:255',
+            'fullname' => 'required|string|max:255',
+            'phone_number' => ['required', 'string', new PhoneNumber],
+            'address' => 'required|string|max:255',
+            'province_id' => 'required|numeric|integer',
+            'district_id' => 'required|numeric|integer',
+            'ward_id' => 'required|numeric|integer'
+        ]);
+
+        $msgError = Region::ValidateAddress($fields['ward_id'], $fields['district_id'], $fields['province_id']);
+        if ($msgError) {
+            return response()->json([
+                'message' => $msgError,
+                "errors" => []
+            ], 400);
+        }
+
+        $user = Auth::user();
+        $user->Update([
+            'name' => $fields['name'],
+            'fullname' => $fields['fullname'],
+            'phone_number' => $fields['phone_number'],
+            'address' => $fields['address'],
+            'province_id' => $fields['province_id'],
+            'district_id' => $fields['district_id'],
+            'ward_id' => $fields['ward_id']
+        ]);
+
+        return Response([
+            'user' => $user,
+        ], 201);
+    }
+
+    public function Logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
     }
 }

@@ -15,8 +15,12 @@ class Manufacturer extends Model
         'updated_at',
     ];
 
-    public static function GetList()
+    public static function GetList($assetID)
     {
-        return Manufacturer::all();
+        return Manufacturer::select('manufacturer.*')
+            ->join('item', 'item.manufacturer_id', '=', 'manufacturer.id')
+            ->where('item.asset_id', $assetID)
+            ->distinct()
+            ->get();
     }
 }

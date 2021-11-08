@@ -37,6 +37,8 @@ Route::get('/region/get_list', [RegionController::class, 'GetListBy'])->middlewa
 Route::get('/asset/get_list', [AssetController::class, 'GetList']);
 
 Route::get('/item/get_list_search', [ItemController::class, 'GetListSearch']);
+Route::get('/item/get_list_new', [ItemController::class, 'GetListNew']);
+Route::get('/item/get_list_discount', [ItemController::class, 'GetListDiscount']);
 Route::get('/item/get_one', [ItemController::class, 'GetOne']);
 
 Route::get('/manufacturer/get_list', [ManufacturerController::class, 'GetList']);
@@ -45,7 +47,9 @@ Route::get('/slide/get_list', [SlideController::class, 'GetList']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('/auth/update', [AuthController::class, 'UpdateAccount']);
+    Route::post('/auth/update', [AuthController::class, 'UpdateInfomation']);
+    Route::post('/auth/logout', [AuthController::class, 'Logout']);
+
 
     Route::get('/cart/get_cart', [CartController::class, 'GetCart']);
     Route::post('/cart/add_to_cart', [CartController::class, 'AddToCart']);
