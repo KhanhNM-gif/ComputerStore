@@ -60,6 +60,14 @@ class Item extends Model
             $query_item->whereIn('manufacturer_id', array_map('intval', explode(',', $search['manufacturerIds'])));
         }
 
+        if (array_key_exists('isNew', $search)) {
+            $query_item->whereRaw("DATEDIFF(item.created_at,now()) < 30");
+        }
+
+        if (array_key_exists('isDiscount', $search)) {
+            $query_item->whereRaw("price - promotional_price > 0");
+        }
+
         if (array_key_exists('OrderBy', $search)) {
             switch ($search['OrderBy']) {
                 case 1:

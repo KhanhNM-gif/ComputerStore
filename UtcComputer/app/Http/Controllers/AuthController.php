@@ -259,4 +259,13 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
     }
+
+    public function GetOne()
+    {
+        $user = Auth::user();
+
+        return Response([
+            'user' => $user,
+        ], 201);
+    }
 }

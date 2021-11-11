@@ -8,11 +8,6 @@ use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\SlideController;
-use App\Http\Controllers\TabController;
-use App\Models\CartManager;
-use App\Models\Item;
-use App\Models\Manufacturer;
-use App\Models\Region;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +44,7 @@ Route::get('/slide/get_list', [SlideController::class, 'GetList']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/update', [AuthController::class, 'UpdateInfomation']);
     Route::post('/auth/logout', [AuthController::class, 'Logout']);
+    Route::get('/auth/getone', [AuthController::class, 'GetOne']);
 
 
     Route::get('/cart/get_cart', [CartController::class, 'GetCart']);

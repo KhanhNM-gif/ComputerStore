@@ -42,6 +42,8 @@ class ItemController extends Controller
             'assetID' => 'numeric|integer|required',
             'pageSize' => 'numeric|integer|required',
             'page' => 'numeric|integer|required',
+            'isNew' => 'boolean|nullable',
+            'isDiscount' => 'boolean|nullable',
         ]);
 
         $ltChildAsset = null;
