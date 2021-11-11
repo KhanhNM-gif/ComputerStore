@@ -41,7 +41,7 @@ class Item extends Model
         }
 
         if (array_key_exists('statusId', $search)) {
-            $query_item->where('status_id', $search['textSearch']);
+            $query_item->where('status_id', $search['statusId']);
         }
 
         if (array_key_exists('maxPrice', $search)) {
