@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ManufacturerController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\SlideController;
@@ -39,6 +40,8 @@ Route::get('/item/get_one', [ItemController::class, 'GetOne']);
 Route::get('/manufacturer/get_list', [ManufacturerController::class, 'GetList']);
 
 Route::get('/slide/get_list', [SlideController::class, 'GetList']);
+
+Route::get('/notify/sendPush', [NotificationController::class, 'sendPush']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

@@ -185,8 +185,6 @@ class AuthController extends Controller
             'password' => 'required|string|min:6|max:255'
         ]);
 
-        $request = request();
-
         $user = Account::where('email', $credentials['email'])->first();
 
         if (!$user) {
