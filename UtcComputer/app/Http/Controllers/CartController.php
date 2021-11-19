@@ -32,7 +32,7 @@ class CartController extends Controller
         $cart = new CartManager();
         $cart->AddToCart($dataRequest['itemId'], $dataRequest['quanlity']);
 
-        return Response(['ltItem' => $cart->GetCart()], 200);
+        return Response(['ltItem' => $cart->getListItemInCart()], 200);
     }
 
     public function GetCart()
@@ -58,6 +58,6 @@ class CartController extends Controller
         $cart = new CartManager();
         $cart->deleteProduct($dataRequest['itemID']);
 
-        return Response(['ltItem' => $cart->GetCart()], 200);
+        return Response(['ltItem' => $cart->getListItemInCart()], 200);
     }
 }
