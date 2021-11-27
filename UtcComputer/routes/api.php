@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/auth/update', [AuthController::class, 'UpdateInfomation']);
     Route::post('/auth/logout', [AuthController::class, 'Logout']);
     Route::get('/auth/getone', [AuthController::class, 'GetOne']);
+    Route::post('/auth/changePassword', [AuthController::class, 'ChangePassword']);
 
 
     Route::get('/cart/get_cart', [CartController::class, 'GetCart']);

@@ -71,7 +71,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => $msg,
                 "errors" => []
-            ], 201);
+            ], 401);
         }
 
         Account::where('email', $user->email)->update(['email_verified_at' => now()]);
@@ -191,7 +191,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => 'Email chưa được đăng kí trên hệ thống',
                 "errors" => []
-            ], 201);
+            ], 401);
         }
 
         if (password_verify($credentials['password'], $user['password'])) {
@@ -199,7 +199,7 @@ class AuthController extends Controller
                 return response()->json([
                     'message' => 'Tài khoản chưa được kích hoạt',
                     "errors" => []
-                ], 201);
+                ], 401);
             }
 
             $token = $user->createToken('myapptoken')->plainTextToken;
@@ -264,6 +264,47 @@ class AuthController extends Controller
 
         return Response([
             'user' => $user,
-        ], 201);
+        ], 200);
+    }
+
+    public function ChangePassword(Request $request){
+
+        $msg = $this->ChangePasswordValidate($request,$output);
+        if ($msg) {
+            return response()->json([
+                'message' => $msg,
+                "errors" => []
+            ], 401);
+        }
+
+        $output->user->Update([
+            'password' => password_hash($output->input['password_new'], PASSWORD_DEFAULT),
+        ]);
+
+        return Response([
+            'user' => $output->user,
+        ], 200);
+    }
+    private function ChangePasswordValidate(Request $request, &$output)
+    {
+        $input = $request->validate([
+            'password_old' => 'required|string|min:6|max:255',
+            'password_new' => 'required|string|confirmed|min:6|max:255'
+        ]);
+
+        $user = Account::find(Auth::user()->id);
+
+        if (password_verify($input['password_old'], $user['password'])){
+            return 'Mật khẩu đăng nhập sai. Vui lòng nhập lại';
+        }
+        
+        if ($input['password_old'] == $user['password_new']){
+            return 'Mật khẩu mới không được trùng với mật khẩu cũ';
+        }
+
+        $output = [
+            'input' => $input,
+            'user' => $user
+        ];
     }
 }

@@ -29,6 +29,12 @@ class CartController extends Controller
                 "errors" => []
             ], 400);
         }
+        if($item['quanlity'] < $dataRequest['quanlity']){
+            return response()->json([
+                'message' => 'Hàng trong kho không đủ. Vui lòng bạn quay lại sau',
+                "errors" => []
+            ], 400);
+        }
         $cart = new CartManager();
         $cart->AddToCart($dataRequest['itemId'], $dataRequest['quanlity']);
 
