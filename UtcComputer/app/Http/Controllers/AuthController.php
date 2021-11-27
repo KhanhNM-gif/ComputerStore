@@ -267,9 +267,10 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function ChangePassword(Request $request){
+    public function ChangePassword(Request $request)
+    {
 
-        $msg = $this->ChangePasswordValidate($request,$output);
+        $msg = $this->ChangePasswordValidate($request, $output);
         if ($msg) {
             return response()->json([
                 'message' => $msg,
@@ -277,12 +278,12 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $output->user->Update([
-            'password' => password_hash($output->input['password_new'], PASSWORD_DEFAULT),
+        $output['user']->Update([
+            'password' => password_hash($output['input']['password_new'], PASSWORD_DEFAULT),
         ]);
 
         return Response([
-            'user' => $output->user,
+            'user' => $output['user'],
         ], 200);
     }
     private function ChangePasswordValidate(Request $request, &$output)
@@ -294,11 +295,11 @@ class AuthController extends Controller
 
         $user = Account::find(Auth::user()->id);
 
-        if (password_verify($input['password_old'], $user['password'])){
+        if (!password_verify($input['password_old'], $user['password'])) {
             return 'Mật khẩu đăng nhập sai. Vui lòng nhập lại';
         }
-        
-        if ($input['password_old'] == $user['password_new']){
+
+        if ($input['password_old'] == $input['password_new']) {
             return 'Mật khẩu mới không được trùng với mật khẩu cũ';
         }
 
