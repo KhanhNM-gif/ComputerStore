@@ -38,7 +38,6 @@ class CartManager
     {
         return $this->cart->items()->sum('price');
     }
-
     private function findOrCreate($cartId = null)
     {
         $cart = null;

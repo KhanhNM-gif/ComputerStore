@@ -34,7 +34,7 @@ class Item extends Model
     {
         $query_item = Item::query();
 
-        $query_item->select('id', 'item_name', 'price', 'image', 'promotional_price');
+        $query_item->select('id', 'item_name', 'price', 'image', 'promotional_price', 'status_id', 'status_name');
 
         if (array_key_exists('textSearch', $search)) {
             $query_item->where('item_name', 'LIKE', '%' . $search['textSearch'] . '%');
@@ -89,7 +89,8 @@ class Item extends Model
                     break;
             }
         }
-        $item = $query_item->paginate($search['pageSize']);
+        
+        $item = $query_item->join('item_status', 'item_status.id', '=', 'item.status_id')->paginate($search['pageSize']);
 
         return $item;
     }
