@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Service;
 
 use GuzzleHttp\Client;
 
@@ -27,7 +27,7 @@ class FCMService
      *
      * @return bool|string
      */
-    
+
     public function send(string $device_token, array $notification, array $data)
     {
         if ($data['device_type'] === $this->apiConfig['device_type']['ios']) {
@@ -76,7 +76,7 @@ class FCMService
         $client = new Client([
             'headers' => [
                 'Content-Type' => 'application/json',
-                'Authorization' => 'key='. $this->apiConfig['server_key'],
+                'Authorization' => 'key=AAAAqIV8Ouk:APA91bEIRbxvSlq_vEc9v49eysPVOnnudGLamCe9nths9y0UYm3UU_UXPZpn-UddtJrjmz5Gcwfv6mPTw_c38p042ykRtR227UsdJJIPnLIjchn_6AM04kR76nbEhN-_WUqwdB3J_7gP',
             ]
         ]);
         $res = $client->post(
@@ -84,7 +84,7 @@ class FCMService
             ['body' => json_encode($fields)]
         );
         $res = json_decode($res->getBody());
-    
+
         return true;
     }
 }

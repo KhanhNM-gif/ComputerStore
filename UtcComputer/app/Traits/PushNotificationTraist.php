@@ -2,9 +2,9 @@
 
 namespace App\Traits;
 
-use App\Services\FCMService;
+use App\Service\FCMService;
 
-trait PushNotificationTrait
+trait PushNotificationTraist
 {
     public function pushMessage(string $deviceToken, array $notification, array $data)
     {
